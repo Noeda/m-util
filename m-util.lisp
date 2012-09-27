@@ -84,3 +84,9 @@ bound to the value respectively. You can escape the iteration with
         ((atom structure) `(,structure))
         (t (mapcan #'flatten structure))))
 
+(defun now ()
+  "Returns the current time in seconds using floating point value."
+  (/ (coerce (get-internal-real-time) 'float)
+     (coerce internal-time-units-per-second 'float)))
+
+

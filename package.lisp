@@ -14,6 +14,7 @@
     #:hash-table-keys-to-list
 
     #:flatten
+    #:now
 
     ;; The dlambda
     #:dlambda
