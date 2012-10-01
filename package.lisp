@@ -16,6 +16,10 @@
     #:flatten
     #:now
 
+    #:mvb
+    #:dbind
+    #:unwind-protect-if-fails
+
     ;; The dlambda
     #:dlambda
 

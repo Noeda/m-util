@@ -55,6 +55,14 @@
                                  ,args-sym))))
                    bodies)))))
 
+(defmacro mvb (&rest rest)
+  "Shorthand for MULTIPLE-VALUE-BIND"
+  `(multiple-value-bind ,@rest))
+
+(defmacro dbind (&rest rest)
+  "Shorthand for DESTRUCTURING-BIND"
+  `(destructuring-bind ,@rest))
+
 (defmacro with-hash-table-iterator* ((key-var value-var hash-table)
                                      &body body)
   "Iterates over a hash table. At each iteration, the variable pointed by
@@ -89,4 +97,16 @@ bound to the value respectively. You can escape the iteration with
   (/ (coerce (get-internal-real-time) 'float)
      (coerce internal-time-units-per-second 'float)))
 
+
+(defmacro unwind-protect-if-fails (test &body cleanups)
+  "Same as UNWIND-PROTECT but only executes cleanup forms if TEST does not
+  exit normally."
+  (with-gensyms (do-cleanup)
+    `(let ((,do-cleanup t))
+       (unwind-protect
+           (multiple-value-prog1
+             ,test
+             (setq ,do-cleanup nil))
+         (when ,do-cleanup
+           ,@cleanups)))))
 
