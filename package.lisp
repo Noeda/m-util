@@ -20,6 +20,8 @@
     #:dbind
     #:unwind-protect-if-fails
 
+    #:unique
+
     ;; The dlambda
     #:dlambda
 

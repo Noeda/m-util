@@ -97,6 +97,11 @@ bound to the value respectively. You can escape the iteration with
   (/ (coerce (get-internal-real-time) 'float)
      (coerce internal-time-units-per-second 'float)))
 
+(defun unique ()
+  "Returns a unique value each time it is called. The actual type of the
+  value, at the moment, is a simple cons with random data. Each unique cons
+  is not EQUAL to any other cons."
+  (cons (gensym) nil))
 
 (defmacro unwind-protect-if-fails (test &body cleanups)
   "Same as UNWIND-PROTECT but only executes cleanup forms if TEST does not
