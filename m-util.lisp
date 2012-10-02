@@ -97,11 +97,14 @@ bound to the value respectively. You can escape the iteration with
   (/ (coerce (get-internal-real-time) 'float)
      (coerce internal-time-units-per-second 'float)))
 
-(defun unique ()
+(defun unique (&optional name)
   "Returns a unique value each time it is called. The actual type of the
   value, at the moment, is a simple cons with random data. Each unique cons
-  is not EQUAL to any other cons."
-  (cons (gensym) nil))
+  is not EQUAL to any other cons. NAME can be given. It is put inside the
+  cons. When the cons is printed, the name can be seen. Two uniques with
+  the same name are still unique, that is to say, NAME is only for cosmetic
+  purposes."
+  (cons (gensym) name))
 
 (defmacro unwind-protect-if-fails (test &body cleanups)
   "Same as UNWIND-PROTECT but only executes cleanup forms if TEST does not
