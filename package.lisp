@@ -37,5 +37,18 @@
     #:awhen
     #:aunless
     #:alet
-    #:adlambda))
+    #:adlambda
+
+    ;; Function composition
+    #:compose
+
+    ;; Symbol making
+    #:mksymb
+
+    ;; Instant evaluation
+    #:instantly!
+
+    ;; Maps
+    #:map1n
+    #:map1))
 

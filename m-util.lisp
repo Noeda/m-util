@@ -118,3 +118,49 @@ bound to the value respectively. You can escape the iteration with
          (when ,do-cleanup
            ,@cleanups)))))
 
+(defmacro instantly! (&body body)
+  "Shorthand for (EVAL-WHEN (:COMPILE-TOPLEVEL :LOAD-TOPLEVEL :EXECUTE) BODY)."
+  `(eval-when (:compile-toplevel :load-toplevel :execute) ,@body))
+
+(defun concat-strings (&rest strings)
+  "Concatenates all the strings!"
+  (apply #'concatenate 'string strings))
+
+(defun build-str (&rest vals)
+  (apply #'concatenate 'string
+         (mapcar #'string vals)))
+
+(defun mksymb (&rest vals)
+  "Builds and interns a symbol that is built from concatenation of symbols and strings in VALS.
+
+E.g. (MKSYMB 'A 'B 'C) => ABC
+"
+  (intern (apply #'build-str vals)))
+
+(defmacro map1n (list var count-var &body body)
+  "Just like MAP1 but also binds COUNT-VAR to 0, 1, 2...n for each car."
+  `(let ((,count-var 0))
+     (map1 ,list ,var (prog1 (progn ,@body) (incf ,count-var)))))
+
+(defmacro map1 (list var &body body)
+  "Given LIST and variable name VAR, binds VAR in BODY for each car in LIST.
+
+These two are equivalent:
+
+  (MAPCAR (LAMBDA (X) ...) LIST)
+  (MAP1 LIST X ...)
+
+The latter is just shorter."
+  `(mapcar (lambda (,var) ,@body) ,list))
+
+(defmacro compose (&rest funs)
+  "Expands into code that returns a function that calls each of the
+  functions in FUNS in order.
+
+E.g. (FUNCALL (COMPOSE #'A #'B) X) is about the same as (A (B X))."
+  (if (= (length funs) 1)
+      (car funs)
+      (with-gensyms (x)
+        `(lambda (x)
+           (funcall (compose ,@(butlast funs))
+                    (funcall ,@(last funs) x))))))
